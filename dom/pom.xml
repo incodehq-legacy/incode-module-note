@@ -21,11 +21,11 @@ Copyright 2014~2015 Dan Haywood
     <artifactId>incode-module-note-dom</artifactId>
     <version>1.9.0-SNAPSHOT</version>
 
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
-    <name>Incode Note Module DOM</name>
+    <name>Incode Note Module</name>
     <description>
-        A module providing event.
+        A module providing notes, optionally with associated date.
     </description>
 
     <url>https://github.com/isisaddons/incode-module-note</url>
@@ -71,22 +71,6 @@ Copyright 2014~2015 Dan Haywood
     </properties>
 
     <build>
-        <resources>
-            <resource>
-                <filtering>false</filtering>
-                <directory>src/main/resources</directory>
-            </resource>
-            <resource>
-                <filtering>false</filtering>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>**</include>
-                </includes>
-                <excludes>
-                    <exclude>**/*.java</exclude>
-                </excludes>
-            </resource>
-        </resources>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -210,6 +194,23 @@ Copyright 2014~2015 Dan Haywood
 
     <dependencyManagement>
         <dependencies>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>incode-module-note-dom-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>incode-module-note-dom-impl</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>incode-module-note-dom-spi</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis</artifactId>
@@ -217,51 +218,39 @@ Copyright 2014~2015 Dan Haywood
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <dependency>
+                <groupId>org.isisaddons.wicket.fullcalendar2</groupId>
+                <artifactId>isis-wicket-fullcalendar2-cpt</artifactId>
+                <version>${isis-wicket-fullcalendar2-cpt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.isisaddons.module.poly</groupId>
+                <artifactId>isis-module-poly-dom</artifactId>
+                <version>${isis-module-poly-dom.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.isisaddons.module.fakedata</groupId>
+                <artifactId>isis-module-fakedata-dom</artifactId>
+                <version>${isis-module-fakedata-dom.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>${assertj-core.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.danhaywood.java</groupId>
+                <artifactId>danhaywood-java-assertjext</artifactId>
+                <version>${danhaywood-java-assertjext.version}</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-applib</artifactId>
-            <version>${isis.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.isisaddons.wicket.fullcalendar2</groupId>
-            <artifactId>isis-wicket-fullcalendar2-cpt</artifactId>
-            <version>${isis-wicket-fullcalendar2-cpt.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.isisaddons.module.poly</groupId>
-            <artifactId>isis-module-poly-dom</artifactId>
-            <version>${isis-module-poly-dom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.isisaddons.module.fakedata</groupId>
-            <artifactId>isis-module-fakedata-dom</artifactId>
-            <version>${isis-module-fakedata-dom.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-unittestsupport</artifactId>
-            <version>${isis.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <version>${assertj-core.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.danhaywood.java</groupId>
-            <artifactId>danhaywood-java-assertjext</artifactId>
-            <version>${danhaywood-java-assertjext.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
 
     <!-- http://central.sonatype.org/pages/apache-maven.html -->
     <distributionManagement>
@@ -271,130 +260,13 @@ Copyright 2014~2015 Dan Haywood
         </snapshotRepository>
     </distributionManagement>
 
+    <modules>
+        <module>api</module>
+        <module>impl</module>
+        <module>spi</module>
+    </modules>
+    
     <profiles>
-
-        <profile>
-            <id>isis-validate</id>
-            <activation>
-                <property>
-                    <name>isis-validate</name>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.isis.tool</groupId>
-                        <artifactId>isis-maven-plugin</artifactId>
-                        <version>${isis.version}</version>
-                        <configuration>
-                            <appManifest>org.incode.module.note.dom.NoteModuleDomManifest</appManifest>
-                        </configuration>
-                        <dependencies>
-                            <dependency>
-                                <groupId>${project.groupId}</groupId>
-                                <artifactId>incode-module-note-dom</artifactId>
-                                <version>${project.version}</version>
-                            </dependency>
-                            <!--
-                            ... workaround to avoid conflict with plexus-default
-                                (not sure why exclusions in the isis-maven-plugin aren't sufficient, though ...
-                            -->
-                            <dependency>
-                                <groupId>com.google.guava</groupId>
-                                <artifactId>guava</artifactId>
-                                <version>16.0.1</version>
-                            </dependency>
-                        </dependencies>
-                        <executions>
-                            <execution>
-                                <phase>test</phase>
-                                <goals>
-                                    <goal>validate</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
-            <id>enhance</id>
-            <activation>
-                <property>
-                    <name>!skip.enhance</name>
-                </property>
-            </activation>
-            <properties>
-                <datanucleus-maven-plugin.version>4.0.1</datanucleus-maven-plugin.version>
-            </properties>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-                            <groupId>org.eclipse.m2e</groupId>
-                            <artifactId>lifecycle-mapping</artifactId>
-                            <version>1.0.0</version>
-                            <configuration>
-                                <lifecycleMappingMetadata>
-                                    <pluginExecutions>
-                                        <pluginExecution>
-                                            <pluginExecutionFilter>
-                                                <groupId>org.datanucleus</groupId>
-                                                <artifactId>datanucleus-maven-plugin</artifactId>
-                                                <versionRange>[${datanucleus-maven-plugin.version},)</versionRange>
-                                                <goals>
-                                                    <goal>enhance</goal>
-                                                </goals>
-                                            </pluginExecutionFilter>
-                                            <action>
-                                                <ignore></ignore>
-                                            </action>
-                                        </pluginExecution>
-                                    </pluginExecutions>
-                                </lifecycleMappingMetadata>
-                            </configuration>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-                <plugins>
-                    <plugin>
-                        <groupId>org.datanucleus</groupId>
-                        <artifactId>datanucleus-maven-plugin</artifactId>
-                        <version>${datanucleus-maven-plugin.version}</version>
-                        <configuration>
-                            <fork>false</fork>
-                            <log4jConfiguration>${basedir}/log4j.properties</log4jConfiguration>
-                            <verbose>true</verbose>
-                            <props>${basedir}/datanucleus.properties</props>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <phase>process-classes</phase>
-                                <goals>
-                                    <goal>enhance</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-            <dependencies>
-                <dependency>
-                    <groupId>org.datanucleus</groupId>
-                    <artifactId>datanucleus-core</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>org.datanucleus</groupId>
-                    <artifactId>datanucleus-jodatime</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>org.datanucleus</groupId>
-                    <artifactId>datanucleus-api-jdo</artifactId>
-                </dependency>
-            </dependencies>
-        </profile>
         <profile>
             <id>cloudbees-snapshots</id>
             <activation>

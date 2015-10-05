@@ -102,35 +102,10 @@ language governing permissions and limitations under the License.
 
     <dependencies>
     
-        <!-- other modules in this project -->
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>incode-module-note-dom</artifactId>
-            <exclusions>
-                <exclusion>
-                    <!-- so don't pick up transitive dependency to asm 4.0.0 -->
-                    <groupId>org.datanucleus</groupId>
-                    <artifactId>datanucleus-enhancer</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>incode-module-note-fixture</artifactId>
-            <exclusions>
-                <exclusion>
-                    <!-- so don't pick up transitive dependency to asm 4.0.0 -->
-                    <groupId>org.datanucleus</groupId>
-                    <artifactId>datanucleus-enhancer</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>incode-module-note-app</artifactId>
         </dependency>
-
 
         <!-- other isis components -->
         <dependency>
@@ -146,12 +121,7 @@ language governing permissions and limitations under the License.
             <artifactId>isis-core-security-shiro</artifactId>
         </dependency>
 
-
         <!-- isis core -->
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtime</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-wrapper</artifactId>
@@ -229,8 +199,6 @@ language governing permissions and limitations under the License.
                     <name>!skip.console</name>
                 </property>
             </activation>
-            <properties>
-            </properties>
             <build>
                 <plugins>
                     <plugin>
@@ -266,7 +234,7 @@ language governing permissions and limitations under the License.
                     <plugin>
                         <artifactId>maven-war-plugin</artifactId>
                         <configuration>
-                            <warName>simple</warName>
+                            <warName>incode-module-note-webapp</warName>
                             <archive>
                                 <manifest>
                                     <addClasspath>false</addClasspath>

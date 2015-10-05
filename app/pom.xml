@@ -52,15 +52,18 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>incode-module-note-fixture</artifactId>
+            <exclusions>
+                <exclusion>
+                    <!-- so don't pick up transitive dependency to asm 4.0.0 -->
+                    <groupId>org.datanucleus</groupId>
+                    <artifactId>datanucleus-enhancer</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-wrapper</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtime</artifactId>
         </dependency>
 
     </dependencies>
