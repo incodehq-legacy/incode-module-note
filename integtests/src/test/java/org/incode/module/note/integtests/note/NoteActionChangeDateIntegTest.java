@@ -33,7 +33,7 @@ import org.apache.isis.applib.services.wrapper.InvalidException;
 import org.incode.module.note.dom.api.notable.Notable;
 import org.incode.module.note.dom.impl.notablelink.NotableLink;
 import org.incode.module.note.dom.impl.notablelink.NotableLinkRepository;
-import org.incode.module.note.dom.impl.note.Note;
+import org.incode.module.note.dom.impl.note.NoteImpl;
 import org.incode.module.note.dom.impl.note.NoteActionChangeDate;
 import org.incode.module.note.dom.impl.note.NoteContributionsOnNotable;
 import org.incode.module.note.dom.impl.note.NoteRepository;
@@ -66,9 +66,9 @@ public class NoteActionChangeDateIntegTest extends NoteModuleIntegTest {
     NoteActionChangeDate noteActionChangeDate;
 
     Notable notable;
-    Note note;
-    Note noteWithoutDate;
-    Note noteWithoutText;
+    NoteImpl note;
+    NoteImpl noteWithoutDate;
+    NoteImpl noteWithoutText;
 
     @Before
     public void setUpData() throws Exception {
@@ -83,7 +83,7 @@ public class NoteActionChangeDateIntegTest extends NoteModuleIntegTest {
         wrap(noteContributionsOnNotable).addNote(notable, "note B", null, null);
         wrap(noteContributionsOnNotable).addNote(notable, null, someOtherDate, "RED");
 
-        final List<Note> noteList = wrap(noteContributionsOnNotable).notes(notable);
+        final List<NoteImpl> noteList = wrap(noteContributionsOnNotable).notes(notable);
         note = Iterables.find(noteList, x -> x.getNotes() != null && x.getDate() != null);
         noteWithoutDate = Iterables.find(noteList, x -> x.getDate() == null);
         noteWithoutText = Iterables.find(noteList, x -> x.getNotes() == null);
@@ -107,7 +107,7 @@ public class NoteActionChangeDateIntegTest extends NoteModuleIntegTest {
             final LocalDate date = wrap(note).getDate();
             final String calendarNameBefore = wrap(note).getCalendarName();
 
-            final List<Note> noteList = asList(noteRepository.findByNotableInDateRange(notable, date, date));
+            final List<NoteImpl> noteList = asList(noteRepository.findByNotableInDateRange(notable, date, date));
             assertThat(noteList).hasSize(1);
             assertThat(noteList.get(0)).isSameAs(note);
 
@@ -131,7 +131,7 @@ public class NoteActionChangeDateIntegTest extends NoteModuleIntegTest {
             assertThat(asList(noteRepository.findByNotableInDateRange(notable, date, date))).hasSize(0);
 
             // instead...
-            final List<Note> noteListAfter = asList(
+            final List<NoteImpl> noteListAfter = asList(
                     noteRepository.findByNotableInDateRange(notable, newDate, newDate));
             assertThat(noteListAfter).hasSize(1);
             assertThat(noteListAfter.get(0)).isSameAs(note);
@@ -153,7 +153,7 @@ public class NoteActionChangeDateIntegTest extends NoteModuleIntegTest {
             // given
             final LocalDate date = wrap(note).getDate();
 
-            final List<Note> noteList = asList(noteRepository.findByNotableInDateRange(notable, date, date));
+            final List<NoteImpl> noteList = asList(noteRepository.findByNotableInDateRange(notable, date, date));
             assertThat(noteList).hasSize(1);
             assertThat(noteList.get(0)).isSameAs(note);
 
@@ -186,7 +186,7 @@ public class NoteActionChangeDateIntegTest extends NoteModuleIntegTest {
         public void lists_the_remaining_calendars_as_well_as_the_notes_current_one() throws Exception {
 
             // given
-            final List<Note> notes = wrap(noteContributionsOnNotable).notes(notable);
+            final List<NoteImpl> notes = wrap(noteContributionsOnNotable).notes(notable);
             final List<String> calendarNames = asList(Iterables.transform(notes, x -> x.getCalendarName()));
             assertThat(calendarNames).containsAll(Arrays.asList("RED", "GREEN", null));
 

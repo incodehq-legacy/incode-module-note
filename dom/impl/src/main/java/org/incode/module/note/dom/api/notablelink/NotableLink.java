@@ -42,10 +42,10 @@ import org.isisaddons.module.poly.dom.PolymorphicAssociationLink;
 import org.isisaddons.wicket.fullcalendar2.cpt.applib.CalendarEventable;
 import org.isisaddons.wicket.fullcalendar2.cpt.applib.Calendarable;
 
-import org.incode.module.note.dom.NoteModule;
+import org.incode.module.note.dom.api.NoteApiModule;
 import org.incode.module.note.dom.api.notable.Notable;
 import org.incode.module.note.dom.impl.calendarname.CalendarNameService;
-import org.incode.module.note.dom.impl.note.Note;
+import org.incode.module.note.dom.impl.note.NoteImpl;
 
 @javax.jdo.annotations.PersistenceCapable(
         identityType=IdentityType.DATASTORE,
@@ -97,11 +97,11 @@ import org.incode.module.note.dom.impl.note.Note;
         objectType = "note.NotableLink"
 )
 public abstract class NotableLink
-        extends PolymorphicAssociationLink<Note, Notable, NotableLink>
+        extends PolymorphicAssociationLink<NoteImpl, Notable, NotableLink>
         implements Calendarable {
 
     //region > event classes
-    public static abstract class PropertyDomainEvent<T> extends NoteModule.PropertyDomainEvent<NotableLink, T> {
+    public static abstract class PropertyDomainEvent<T> extends NoteApiModule.PropertyDomainEvent<NotableLink, T> {
         public PropertyDomainEvent(final NotableLink source, final Identifier identifier) {
             super(source, identifier);
         }
@@ -111,7 +111,7 @@ public abstract class NotableLink
         }
     }
 
-    public static abstract class CollectionDomainEvent<T> extends NoteModule.CollectionDomainEvent<NotableLink, T> {
+    public static abstract class CollectionDomainEvent<T> extends NoteApiModule.CollectionDomainEvent<NotableLink, T> {
         public CollectionDomainEvent(final NotableLink source, final Identifier identifier, final org.apache.isis.applib.services.eventbus.CollectionDomainEvent.Of of) {
             super(source, identifier, of);
         }
@@ -121,7 +121,7 @@ public abstract class NotableLink
         }
     }
 
-    public static abstract class ActionDomainEvent extends NoteModule.ActionDomainEvent<NotableLink> {
+    public static abstract class ActionDomainEvent extends NoteApiModule.ActionDomainEvent<NotableLink> {
         public ActionDomainEvent(final NotableLink source, final Identifier identifier) {
             super(source, identifier);
         }
@@ -138,9 +138,9 @@ public abstract class NotableLink
 
     //region > instantiateEvent (poly pattern)
     public static class InstantiateEvent
-            extends PolymorphicAssociationLink.InstantiateEvent<Note, Notable, NotableLink> {
+            extends PolymorphicAssociationLink.InstantiateEvent<NoteImpl, Notable, NotableLink> {
 
-        public InstantiateEvent(final Object source, final Note subject, final Notable owner) {
+        public InstantiateEvent(final Object source, final NoteImpl subject, final Notable owner) {
             super(NotableLink.class, source, subject, owner);
         }
     }
@@ -160,13 +160,13 @@ public abstract class NotableLink
      */
     @Override
     @Programmatic
-    public Note getSubject() {
+    public NoteImpl getSubject() {
         return getNote();
     }
 
     @Override
     @Programmatic
-    public void setSubject(final Note subject) {
+    public void setSubject(final NoteImpl subject) {
         setNote(subject);
     }
 
@@ -197,26 +197,26 @@ public abstract class NotableLink
 
     //region > note (property)
 
-    public static class EventDomainEvent extends PropertyDomainEvent<Note> {
+    public static class EventDomainEvent extends PropertyDomainEvent<NoteImpl> {
         public EventDomainEvent(final NotableLink source, final Identifier identifier) {
             super(source, identifier);
         }
-        public EventDomainEvent(final NotableLink source, final Identifier identifier, final Note oldValue, final Note newValue) {
+        public EventDomainEvent(final NotableLink source, final Identifier identifier, final NoteImpl oldValue, final NoteImpl newValue) {
             super(source, identifier, oldValue, newValue);
         }
     }
 
-    private Note note;
+    private NoteImpl note;
     @javax.jdo.annotations.Column(allowsNull = "false", name = "eventId")
     @Property(
             domainEvent = EventDomainEvent.class,
             editing = Editing.DISABLED
     )
-    public Note getNote() {
+    public NoteImpl getNote() {
         return note;
     }
 
-    public void setNote(final Note note) {
+    public void setNote(final NoteImpl note) {
         this.note = note;
     }
     //endregion
@@ -224,9 +224,6 @@ public abstract class NotableLink
     //region > notableObjectType (property)
 
     public static class SourceObjectTypeDomainEvent extends PropertyDomainEvent<String> {
-        public SourceObjectTypeDomainEvent(final NotableLink source, final Identifier identifier) {
-            super(source, identifier);
-        }
         public SourceObjectTypeDomainEvent(final NotableLink source, final Identifier identifier, final String oldValue, final String newValue) {
             super(source, identifier, oldValue, newValue);
         }
@@ -251,9 +248,6 @@ public abstract class NotableLink
     //region > notableIdentifier (property)
 
     public static class SourceIdentifierDomainEvent extends PropertyDomainEvent<String> {
-        public SourceIdentifierDomainEvent(final NotableLink source, final Identifier identifier) {
-            super(source, identifier);
-        }
         public SourceIdentifierDomainEvent(final NotableLink source, final Identifier identifier, final String oldValue, final String newValue) {
             super(source, identifier, oldValue, newValue);
         }
@@ -288,9 +282,6 @@ public abstract class NotableLink
     //region > date (property)
 
     public static class DateDomainEvent extends PropertyDomainEvent<LocalDate> {
-        public DateDomainEvent(final NotableLink source, final Identifier identifier) {
-            super(source, identifier);
-        }
         public DateDomainEvent(final NotableLink source, final Identifier identifier, final LocalDate oldValue, final LocalDate newValue) {
             super(source, identifier, oldValue, newValue);
         }
@@ -299,10 +290,10 @@ public abstract class NotableLink
     private LocalDate date;
 
     /**
-     * Copy of the {@link #getNote() note}'s {@link Note#getDate() date}, to support querying.
+     * Copy of the {@link #getNote() note}'s {@link NoteImpl#getDate() date}, to support querying.
      *
      * <p>
-     *     If the {@link Note#getDate()} is changed, then this derived property is also updated.
+     *     If the {@link NoteImpl#getDate()} is changed, then this derived property is also updated.
      * </p>
      */
     @javax.jdo.annotations.Column(allowsNull = "true")
@@ -333,13 +324,13 @@ public abstract class NotableLink
     private String calendarName;
 
     /**
-     * Copy of the {@link #getNote() note}'s {@link Note#getCalendarName() calendar name}, to support querying.
+     * Copy of the {@link #getNote() note}'s {@link NoteImpl#getCalendarName() calendar name}, to support querying.
      *
      * <p>
-     *     If the {@link Note#getCalendarName()} is changed, then this derived property is also updated.
+     *     If the {@link NoteImpl#getCalendarName()} is changed, then this derived property is also updated.
      * </p>
      */
-    @javax.jdo.annotations.Column(allowsNull = "true", length= NoteModule.JdoColumnLength.CALENDAR_NAME)
+    @javax.jdo.annotations.Column(allowsNull = "true", length= NoteApiModule.JdoColumnLength.CALENDAR_NAME)
     @Property(
             domainEvent = CalendarNameDomainEvent.class,
             editing = Editing.DISABLED
@@ -378,10 +369,10 @@ public abstract class NotableLink
 
     //region > Functions
     public static class Functions {
-        public static Function<NotableLink, Note> note() {
-            return note(Note.class);
+        public static Function<NotableLink, NoteImpl> note() {
+            return note(NoteImpl.class);
         }
-        public static <T extends Note> Function<NotableLink, T> note(Class<T> cls) {
+        public static <T extends NoteImpl> Function<NotableLink, T> note(Class<T> cls) {
             return input -> input != null
                                 ? (T)input.getNote()
                                 : null;

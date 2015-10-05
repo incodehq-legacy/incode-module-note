@@ -27,7 +27,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.incode.module.note.dom.api.notable.Notable;
-import org.incode.module.note.dom.impl.note.Note;
+import org.incode.module.note.dom.impl.note.NoteImpl;
 import org.incode.module.note.dom.impl.note.NoteContributionsOnNotable;
 import org.incode.module.note.dom.impl.note.NoteRepository;
 import org.incode.module.note.fixture.dom.calendarname.CalendarNameRepositoryForDemo;
@@ -77,14 +77,14 @@ public class NoteRepositoryIntegTest extends NoteModuleIntegTest {
             wrap(noteContributionsOnNotable).addNote(notable2, "note C", fakeData.jodaLocalDates().any(), "GREEN");
             wrap(noteContributionsOnNotable).addNote(notable2, "note D", fakeData.jodaLocalDates().any(), "BLUE");
 
-            final List<Note> notable2Notes = wrap(noteContributionsOnNotable).notes(notable2);
+            final List<NoteImpl> notable2Notes = wrap(noteContributionsOnNotable).notes(notable2);
 
             // when
-            final List<Note> noteList = noteRepository.findByNotable(notable2);
+            final List<NoteImpl> noteList = noteRepository.findByNotable(notable2);
 
             // then
             assertThat(noteList).hasSize(2);
-            for (Note note : noteList) {
+            for (NoteImpl note : noteList) {
                 assertThat(note.getNotable()).isEqualTo(notable2);
                 assertThat(notable2Notes).contains(note);
             }
@@ -103,11 +103,11 @@ public class NoteRepositoryIntegTest extends NoteModuleIntegTest {
 
             wrap(noteContributionsOnNotable).addNote(notable2, "note D", fakeData.jodaLocalDates().any(), "GREEN");
 
-            final List<Note> notable1Notes = wrap(noteContributionsOnNotable).notes(notable1);
-            final List<Note> notable2Notes = wrap(noteContributionsOnNotable).notes(notable2);
+            final List<NoteImpl> notable1Notes = wrap(noteContributionsOnNotable).notes(notable1);
+            final List<NoteImpl> notable2Notes = wrap(noteContributionsOnNotable).notes(notable2);
 
             // when
-            final Note note1 = noteRepository.findByNotableAndCalendarName(notable1, "GREEN");
+            final NoteImpl note1 = noteRepository.findByNotableAndCalendarName(notable1, "GREEN");
 
             // then
             assertThat(note1).isNotNull();
@@ -115,7 +115,7 @@ public class NoteRepositoryIntegTest extends NoteModuleIntegTest {
             assertThat(notable1Notes).contains(note1);
 
             // when
-            final Note note2 = noteRepository.findByNotableAndCalendarName(notable2, "GREEN");
+            final NoteImpl note2 = noteRepository.findByNotableAndCalendarName(notable2, "GREEN");
 
             // then
             assertThat(note2).isNotNull();
@@ -128,8 +128,8 @@ public class NoteRepositoryIntegTest extends NoteModuleIntegTest {
 
         private LocalDate someDate;
 
-        private List<Note> notable1Notes;
-        private List<Note> notable2Notes;
+        private List<NoteImpl> notable1Notes;
+        private List<NoteImpl> notable2Notes;
 
         @Before
         public void setUp() throws Exception {
@@ -151,8 +151,8 @@ public class NoteRepositoryIntegTest extends NoteModuleIntegTest {
         public void single() throws Exception {
 
             // when
-            final List<Note> notes = asList(noteRepository.findByNotableInDateRange(notable1, someDate, someDate));
-            final Note noteA = Iterables.find(notable1Notes, x -> x.getNotes().equals("note A"));
+            final List<NoteImpl> notes = asList(noteRepository.findByNotableInDateRange(notable1, someDate, someDate));
+            final NoteImpl noteA = Iterables.find(notable1Notes, x -> x.getNotes().equals("note A"));
 
             // then
             assertThat(notes).hasSize(1);
@@ -164,9 +164,9 @@ public class NoteRepositoryIntegTest extends NoteModuleIntegTest {
         public void multiple() throws Exception {
 
             // when
-            final List<Note> notes = asList(noteRepository.findByNotableInDateRange(notable1, someDate, someDate.plusDays(2)));
-            Note noteA = Iterables.find(notable1Notes, x -> x.getNotes().equals("note A"));
-            Note noteB = Iterables.find(notable1Notes, x -> x.getNotes().equals("note B"));
+            final List<NoteImpl> notes = asList(noteRepository.findByNotableInDateRange(notable1, someDate, someDate.plusDays(2)));
+            NoteImpl noteA = Iterables.find(notable1Notes, x -> x.getNotes().equals("note A"));
+            NoteImpl noteB = Iterables.find(notable1Notes, x -> x.getNotes().equals("note B"));
 
             // then
             assertThat(notes).hasSize(2);
@@ -181,8 +181,8 @@ public class NoteRepositoryIntegTest extends NoteModuleIntegTest {
 
         private LocalDate someDate;
 
-        private List<Note> notable1Notes;
-        private List<Note> notable2Notes;
+        private List<NoteImpl> notable1Notes;
+        private List<NoteImpl> notable2Notes;
 
         @Before
         public void setUp() throws Exception {
@@ -204,8 +204,8 @@ public class NoteRepositoryIntegTest extends NoteModuleIntegTest {
         public void single() throws Exception {
 
             // when
-            final List<Note> notes = asList(noteRepository.findInDateRange(someDate.plusDays(1), someDate.plusDays(2)));
-            Note noteB = Iterables.find(notable1Notes, x -> x.getNotes().equals("note B"));
+            final List<NoteImpl> notes = asList(noteRepository.findInDateRange(someDate.plusDays(1), someDate.plusDays(2)));
+            NoteImpl noteB = Iterables.find(notable1Notes, x -> x.getNotes().equals("note B"));
 
             // then
             assertThat(notes).hasSize(1);
@@ -217,9 +217,9 @@ public class NoteRepositoryIntegTest extends NoteModuleIntegTest {
         public void multiple() throws Exception {
 
             // when
-            final List<Note> notes = asList(noteRepository.findInDateRange(someDate.plusDays(-1), someDate.plusDays(+1)));
-            Note noteA = Iterables.find(notable1Notes, x -> x.getNotes().equals("note A"));
-            Note noteD = Iterables.find(notable2Notes, x -> x.getNotes().equals("note D"));
+            final List<NoteImpl> notes = asList(noteRepository.findInDateRange(someDate.plusDays(-1), someDate.plusDays(+1)));
+            NoteImpl noteA = Iterables.find(notable1Notes, x -> x.getNotes().equals("note A"));
+            NoteImpl noteD = Iterables.find(notable2Notes, x -> x.getNotes().equals("note D"));
 
             // then
             assertThat(notes).hasSize(2);

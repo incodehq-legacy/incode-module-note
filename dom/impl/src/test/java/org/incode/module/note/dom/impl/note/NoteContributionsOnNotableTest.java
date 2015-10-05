@@ -16,17 +16,17 @@ public class NoteContributionsOnNotableTest {
         noteContributionsOnNotable = new NoteContributionsOnNotable();
     }
 
-    public static class HideRemoveNoteTest extends NoteContributionsOnNotableTest {
+    public static class HideRemoveNoteImplTest extends NoteContributionsOnNotableTest {
 
         Notable notable;
-        Note note;
+        NoteImpl note;
 
         @Test
         public void not_visible_if_contributed_to_notable() throws Exception {
 
             // when
             notable = null;
-            note = new Note();
+            note = new NoteImpl();
             final boolean isHidden = noteContributionsOnNotable.hideRemoveNote(notable, note);
 
             // then

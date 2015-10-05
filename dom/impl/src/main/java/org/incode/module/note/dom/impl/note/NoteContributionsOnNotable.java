@@ -43,7 +43,7 @@ import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.clock.ClockService;
 
-import org.incode.module.note.dom.NoteModule;
+import org.incode.module.note.dom.api.NoteApiModule;
 import org.incode.module.note.dom.impl.calendarname.CalendarNameService;
 import org.incode.module.note.dom.api.notable.Notable;
 
@@ -53,7 +53,7 @@ import org.incode.module.note.dom.api.notable.Notable;
 public class NoteContributionsOnNotable {
 
     //region > event classes
-    public static abstract class PropertyDomainEvent<T> extends NoteModule.PropertyDomainEvent<NoteContributionsOnNotable, T> {
+    public static abstract class PropertyDomainEvent<T> extends NoteApiModule.PropertyDomainEvent<NoteContributionsOnNotable, T> {
         public PropertyDomainEvent(final NoteContributionsOnNotable source, final Identifier identifier) {
             super(source, identifier);
         }
@@ -63,7 +63,7 @@ public class NoteContributionsOnNotable {
         }
     }
 
-    public static abstract class CollectionDomainEvent<T> extends NoteModule.CollectionDomainEvent<NoteContributionsOnNotable, T> {
+    public static abstract class CollectionDomainEvent<T> extends NoteApiModule.CollectionDomainEvent<NoteContributionsOnNotable, T> {
         public CollectionDomainEvent(final NoteContributionsOnNotable source, final Identifier identifier, final org.apache.isis.applib.services.eventbus.CollectionDomainEvent.Of of) {
             super(source, identifier, of);
         }
@@ -73,7 +73,7 @@ public class NoteContributionsOnNotable {
         }
     }
 
-    public static abstract class ActionDomainEvent extends NoteModule.ActionDomainEvent<NoteContributionsOnNotable> {
+    public static abstract class ActionDomainEvent extends NoteApiModule.ActionDomainEvent<NoteContributionsOnNotable> {
         public ActionDomainEvent(final NoteContributionsOnNotable source, final Identifier identifier) {
             super(source, identifier);
         }
@@ -106,7 +106,7 @@ public class NoteContributionsOnNotable {
     @CollectionLayout(
             render = RenderType.EAGERLY
     )
-    public List<Note> notes(final Notable notable) {
+    public List<NoteImpl> notes(final Notable notable) {
         return noteRepository.findByNotable(notable);
     }
     //endregion
@@ -140,7 +140,7 @@ public class NoteContributionsOnNotable {
     public Notable addNote(
             final Notable notable,
             @Parameter(optionality = Optionality.OPTIONAL)
-            @ParameterLayout(named = "Note", multiLine = NoteModule.MultiLine.NOTES)
+            @ParameterLayout(named = "Note", multiLine = NoteApiModule.MultiLine.NOTES)
             final String note,
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(named = "Date")
@@ -217,27 +217,27 @@ public class NoteContributionsOnNotable {
             domainEvent = RemoveNoteEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
     )
-    public Notable removeNote(final Notable notable, final Note note) {
+    public Notable removeNote(final Notable notable, final NoteImpl note) {
         noteRepository.remove(note);
         return notable;
     }
 
     /**
-     * Has the effect of hiding the action if was contributed to {@link Note}.
+     * Has the effect of hiding the action if was contributed to {@link NoteImpl}.
      */
-    public boolean hideRemoveNote(final Notable notable, final Note note) {
+    public boolean hideRemoveNote(final Notable notable, final NoteImpl note) {
         return notable == null;
     }
 
-    public String disableRemoveNote(final Notable notable, final Note note) {
+    public String disableRemoveNote(final Notable notable, final NoteImpl note) {
         return choices1RemoveNote(notable).isEmpty() ? "No notes to remove" : null;
     }
 
-    public List<Note> choices1RemoveNote(final Notable notable) {
+    public List<NoteImpl> choices1RemoveNote(final Notable notable) {
         return notable != null ? noteRepository.findByNotable(notable): Collections.emptyList();
     }
 
-    public Note default1RemoveNote(final Notable notable) {
+    public NoteImpl default1RemoveNote(final Notable notable) {
         return firstOf(choices1RemoveNote(notable));
     }
 

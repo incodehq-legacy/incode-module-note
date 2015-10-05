@@ -18,7 +18,7 @@ Copyright 2014~2015 Dan Haywood
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.incode.module.note</groupId>
-    <artifactId>incode-module-note-dom</artifactId>
+    <artifactId>incode-module-note-parent</artifactId>
     <version>1.9.0-SNAPSHOT</version>
 
     <packaging>pom</packaging>
@@ -197,17 +197,12 @@ Copyright 2014~2015 Dan Haywood
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>incode-module-note-dom-api</artifactId>
+                <artifactId>incode-module-note-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>incode-module-note-dom-impl</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>incode-module-note-dom-spi</artifactId>
+                <artifactId>incode-module-note-dom</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -251,6 +246,28 @@ Copyright 2014~2015 Dan Haywood
         </dependencies>
     </dependencyManagement>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.isisaddons.module.fakedata</groupId>
+            <artifactId>isis-module-fakedata-dom</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-unittestsupport</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.danhaywood.java</groupId>
+            <artifactId>danhaywood-java-assertjext</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
     <!-- http://central.sonatype.org/pages/apache-maven.html -->
     <distributionManagement>
@@ -263,7 +280,6 @@ Copyright 2014~2015 Dan Haywood
     <modules>
         <module>api</module>
         <module>impl</module>
-        <module>spi</module>
     </modules>
     
     <profiles>

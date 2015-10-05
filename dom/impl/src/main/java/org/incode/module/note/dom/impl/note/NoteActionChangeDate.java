@@ -19,7 +19,7 @@ import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import org.incode.module.note.dom.NoteModule;
+import org.incode.module.note.dom.api.NoteApiModule;
 import org.incode.module.note.dom.impl.calendarname.CalendarNameService;
 import org.incode.module.note.dom.impl.notablelink.NotableLinkRepository;
 
@@ -28,7 +28,7 @@ import org.incode.module.note.dom.impl.notablelink.NotableLinkRepository;
 )
 public class NoteActionChangeDate {
 
-    public static class DomainEvent extends NoteModule.ActionDomainEvent<NoteActionChangeDate> {
+    public static class DomainEvent extends NoteApiModule.ActionDomainEvent<NoteActionChangeDate> {
         public DomainEvent(
                 final NoteActionChangeDate source,
                 final Identifier identifier,
@@ -41,8 +41,8 @@ public class NoteActionChangeDate {
             domainEvent = DomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
     )
-    public Note changeDate(
-            final Note note,
+    public NoteImpl changeDate(
+            final NoteImpl note,
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(named = "Date")
             final LocalDate date,
@@ -55,26 +55,26 @@ public class NoteActionChangeDate {
         return note;
     }
 
-    public Collection<String> choices2ChangeDate(final Note note) {
+    public Collection<String> choices2ChangeDate(final NoteImpl note) {
         final Collection<String> values = calendarNameService.calendarNamesFor(note.getNotable());
         final List<String> valuesCopy = Lists.newArrayList(values);
         final List<String> currentCalendarsInUse = Lists.transform(
                 noteRepository.findByNotable(note.getNotable()),
-                Note::getCalendarName);
+                NoteImpl::getCalendarName);
         valuesCopy.removeAll(currentCalendarsInUse);
         valuesCopy.add(note.getCalendarName()); // add back in current for this note's notable
         return valuesCopy;
     }
 
-    public LocalDate default1ChangeDate(final Note note) {
+    public LocalDate default1ChangeDate(final NoteImpl note) {
         return note.getDate();
     }
 
-    public String default2ChangeDate(final Note note) {
+    public String default2ChangeDate(final NoteImpl note) {
         return note.getCalendarName();
     }
 
-    public String validateChangeDate(final Note note, final LocalDate date, final String calendarName) {
+    public String validateChangeDate(final NoteImpl note, final LocalDate date, final String calendarName) {
         if(Strings.isNullOrEmpty(note.getNotes()) && (date == null || calendarName == null)) {
             return "Must specify either note text or a date/calendar (or both).";
         }

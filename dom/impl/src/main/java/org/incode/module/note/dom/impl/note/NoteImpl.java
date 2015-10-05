@@ -27,7 +27,7 @@ import org.apache.isis.applib.util.TitleBuffer;
 import org.isisaddons.wicket.fullcalendar2.cpt.applib.CalendarEvent;
 import org.isisaddons.wicket.fullcalendar2.cpt.applib.CalendarEventable;
 
-import org.incode.module.note.dom.NoteModule;
+import org.incode.module.note.dom.api.NoteApiModule;
 import org.incode.module.note.dom.api.notable.Notable;
 import org.incode.module.note.dom.impl.notablelink.NotableLink;
 import org.incode.module.note.dom.impl.notablelink.NotableLinkRepository;
@@ -62,18 +62,18 @@ import org.incode.module.note.dom.impl.notablelink.NotableLinkRepository;
 @DomainObject(
         editing = Editing.DISABLED
 )
-public class Note implements CalendarEventable, Comparable<Note> {
+public class NoteImpl implements CalendarEventable, Comparable<NoteImpl> {
 
     static final int NOTES_ABBREVIATED_TO = 40;
 
     //region > event classes
-    public static abstract class PropertyDomainEvent<S,T> extends NoteModule.PropertyDomainEvent<S, T> {
+    public static abstract class PropertyDomainEvent<S,T> extends NoteApiModule.PropertyDomainEvent<S, T> {
         public PropertyDomainEvent(final S source, final Identifier identifier, final T oldValue, final T newValue) {
             super(source, identifier, oldValue, newValue);
         }
     }
 
-    public static abstract class CollectionDomainEvent<S,T> extends NoteModule.CollectionDomainEvent<S, T> {
+    public static abstract class CollectionDomainEvent<S,T> extends NoteApiModule.CollectionDomainEvent<S, T> {
         public CollectionDomainEvent(
                 final S source,
                 final Identifier identifier,
@@ -82,7 +82,7 @@ public class Note implements CalendarEventable, Comparable<Note> {
         }
     }
 
-    public static abstract class ActionDomainEvent<S> extends NoteModule.ActionDomainEvent<S> {
+    public static abstract class ActionDomainEvent<S> extends NoteApiModule.ActionDomainEvent<S> {
         public ActionDomainEvent(final S source, final Identifier identifier, final Object... arguments) {
             super(source, identifier, arguments);
         }
@@ -110,9 +110,9 @@ public class Note implements CalendarEventable, Comparable<Note> {
     
     //region > notable (property)
 
-    public static class NotableDomainEvent extends PropertyDomainEvent<Note,Notable> {
+    public static class NotableDomainEvent extends PropertyDomainEvent<NoteImpl,Notable> {
         public NotableDomainEvent(
-                final Note source,
+                final NoteImpl source,
                 final Identifier identifier,
                 final Notable oldValue,
                 final Notable newValue) {
@@ -157,9 +157,9 @@ public class Note implements CalendarEventable, Comparable<Note> {
 
     //region > notesAbbreviated (property)
 
-    public static class NotesAbbreviatedDomainEvent extends PropertyDomainEvent<Note,String> {
+    public static class NotesAbbreviatedDomainEvent extends PropertyDomainEvent<NoteImpl,String> {
         public NotesAbbreviatedDomainEvent(
-                final Note source,
+                final NoteImpl source,
                 final Identifier identifier,
                 final String oldValue,
                 final String newValue) {
@@ -192,9 +192,9 @@ public class Note implements CalendarEventable, Comparable<Note> {
 
     //region > notes (property)
 
-    public static class NotesDomainEvent extends PropertyDomainEvent<Note,String> {
+    public static class NotesDomainEvent extends PropertyDomainEvent<NoteImpl,String> {
         public NotesDomainEvent(
-                final Note source,
+                final NoteImpl source,
                 final Identifier identifier,
                 final String oldValue,
                 final String newValue) {
@@ -207,13 +207,13 @@ public class Note implements CalendarEventable, Comparable<Note> {
     /**
      * Hidden in tables, instead the derived {@link #getNotesAbbreviated()} is shown.
      */
-    @javax.jdo.annotations.Column(allowsNull = "true", length = NoteModule.JdoColumnLength.NOTES)
+    @javax.jdo.annotations.Column(allowsNull = "true", length = NoteApiModule.JdoColumnLength.NOTES)
     @Property(
             domainEvent = NotesDomainEvent.class,
             hidden = Where.ALL_TABLES
     )
     @PropertyLayout(
-            multiLine = NoteModule.MultiLine.NOTES
+            multiLine = NoteApiModule.MultiLine.NOTES
     )
     public String getNotes() {
         return notes;
@@ -226,9 +226,9 @@ public class Note implements CalendarEventable, Comparable<Note> {
 
     //region > date (property)
 
-    public static class DateDomainEvent extends PropertyDomainEvent<Note,LocalDate> {
+    public static class DateDomainEvent extends PropertyDomainEvent<NoteImpl,LocalDate> {
         public DateDomainEvent(
-                final Note source,
+                final NoteImpl source,
                 final Identifier identifier,
                 final LocalDate oldValue,
                 final LocalDate newValue) {
@@ -253,9 +253,9 @@ public class Note implements CalendarEventable, Comparable<Note> {
     //endregion
 
     //region > calendarName (property)
-    public static class CalendarNameDomainEvent extends PropertyDomainEvent<Note,String> {
+    public static class CalendarNameDomainEvent extends PropertyDomainEvent<NoteImpl,String> {
         public CalendarNameDomainEvent(
-                final Note source,
+                final NoteImpl source,
                 final Identifier identifier,
                 final String oldValue,
                 final String newValue) {
@@ -283,7 +283,7 @@ public class Note implements CalendarEventable, Comparable<Note> {
      * break</i>, <i>Fixed break exercise</i> and <i>Fixed break exercise
      * reminder</i>.
      */
-    @javax.jdo.annotations.Column(allowsNull = "true", length = NoteModule.JdoColumnLength.CALENDAR_NAME)
+    @javax.jdo.annotations.Column(allowsNull = "true", length = NoteApiModule.JdoColumnLength.CALENDAR_NAME)
     @Property(
             domainEvent = CalendarNameDomainEvent.class,
             editing = Editing.DISABLED
@@ -314,8 +314,8 @@ public class Note implements CalendarEventable, Comparable<Note> {
 
     public final static class Functions {
         private Functions() {}
-        public final static Function<Note, CalendarEvent> TO_CALENDAR_EVENT = input -> input.toCalendarEvent();
-        public final static Function<Note, String> GET_CALENDAR_NAME = input -> input.getCalendarName();
+        public final static Function<NoteImpl, CalendarEvent> TO_CALENDAR_EVENT = input -> input.toCalendarEvent();
+        public final static Function<NoteImpl, String> GET_CALENDAR_NAME = input -> input.getCalendarName();
     }
     //endregion
 
@@ -327,7 +327,7 @@ public class Note implements CalendarEventable, Comparable<Note> {
     }
 
     @Override
-    public int compareTo(final Note other) {
+    public int compareTo(final NoteImpl other) {
         return ObjectContracts.compare(this, other, "date", "source", "calendarName");
     }
 

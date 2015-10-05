@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.incode.module.note.dom;
+package org.incode.module.note.dom.impl;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -26,15 +26,17 @@ import java.util.Map;
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 
+import org.incode.module.note.dom.api.NoteApiModule;
+
 /**
  * Provided for <tt>isis-maven-plugin</tt>.
  */
-public class NoteModuleDomManifest implements AppManifest {
+public class NoteModuleDomImplManifest implements AppManifest {
 
     @Override
     public List<Class<?>> getModules() {
         return Arrays.asList(
-                NoteModule.class  // domain (entities and repositories)
+                NoteApiModule.class  // domain (entities and repositories)
         );
     }
 

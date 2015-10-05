@@ -19,10 +19,10 @@ Copyright 2014~2015 Dan Haywood
 
     <parent>
         <groupId>org.incode.module.note</groupId>
-        <artifactId>incode-module-note-dom</artifactId>
+        <artifactId>incode-module-note-parent</artifactId>
         <version>1.9.0-SNAPSHOT</version>
     </parent>
-    <artifactId>incode-module-note-dom-spi</artifactId>
+    <artifactId>incode-module-note-spi</artifactId>
 
     <packaging>jar</packaging>
 
@@ -31,11 +31,4 @@ Copyright 2014~2015 Dan Haywood
         SPI to the note domain object module.
     </description>
 
-    <dependencies>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>incode-module-note-dom-api</artifactId>
-        </dependency>
-    </dependencies>
-    
 </project>

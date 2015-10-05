@@ -39,13 +39,13 @@ import org.incode.module.note.dom.impl.notablelink.NotableLinkRepository;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
-        repositoryFor = Note.class
+        repositoryFor = NoteImpl.class
 )
 public class NoteRepository {
 
     //region > findByNotable (programmatic)
     @Programmatic
-    public List<Note> findByNotable(final Notable notable) {
+    public List<NoteImpl> findByNotable(final Notable notable) {
         final List<NotableLink> links = notableLinkRepository.findByNotable(notable);
         return Lists.newArrayList(
                 Iterables.transform(links, NotableLink.Functions.note()));
@@ -54,7 +54,7 @@ public class NoteRepository {
 
     //region > findByNotableAndCalendarName (programmatic)
     @Programmatic
-    public Note findByNotableAndCalendarName(
+    public NoteImpl findByNotableAndCalendarName(
             final Notable notable,
             final String calendarName) {
         final NotableLink link = notableLinkRepository
@@ -65,12 +65,12 @@ public class NoteRepository {
 
     //region > findInDateRange (programmatic)
     @Programmatic
-    public List<Note> findInDateRange(
+    public List<NoteImpl> findInDateRange(
             final LocalDate startDate,
             final LocalDate endDate) {
         return container.allMatches(
                 new QueryDefault<>(
-                        Note.class,
+                        NoteImpl.class,
                         "findInDateRange",
                         "startDate", startDate,
                         "endDate", endDate));
@@ -79,7 +79,7 @@ public class NoteRepository {
 
     //region > findByNotableInDateRange (programmatic)
     @Programmatic
-    public Iterable<Note> findByNotableInDateRange(
+    public Iterable<NoteImpl> findByNotableInDateRange(
             final Notable notable,
             final LocalDate startDate,
             final LocalDate endDate) {
@@ -91,12 +91,12 @@ public class NoteRepository {
 
     //region > add (programmatic)
     @Programmatic
-    public Note add(
+    public NoteImpl add(
             final Notable notable,
             final String noteText,
             final LocalDate date,
             final String calendarName) {
-        final Note note = container.newTransientInstance(Note.class);
+        final NoteImpl note = container.newTransientInstance(NoteImpl.class);
         note.setDate(date);
         note.setCalendarName(calendarName);
         note.setNotable(notable);
@@ -109,7 +109,7 @@ public class NoteRepository {
 
     //region > remove (programmatic)
     @Programmatic
-    public void remove(Note note) {
+    public void remove(NoteImpl note) {
         final NotableLink link = notableLinkRepository.findByNote(note);
         container.removeIfNotAlready(link);
         container.flush();
@@ -121,8 +121,8 @@ public class NoteRepository {
     //region > allNotes (programmatic)
 
     @Programmatic
-    public List<Note> allNotes() {
-        return container.allInstances(Note.class);
+    public List<NoteImpl> allNotes() {
+        return container.allInstances(NoteImpl.class);
     }
     //endregion
 

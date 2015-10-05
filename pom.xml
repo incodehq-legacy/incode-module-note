@@ -245,7 +245,7 @@ language governing permissions and limitations under the License.
 
             <dependency>
                 <groupId>org.incode.module.note</groupId>
-                <artifactId>incode-module-note-dom</artifactId>
+                <artifactId>incode-module-note-parent</artifactId>
                 <version>${incode-module-note.version}</version>
                 <type>pom</type>
                 <scope>import</scope>

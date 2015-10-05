@@ -19,10 +19,10 @@ Copyright 2014~2015 Dan Haywood
 
     <parent>
         <groupId>org.incode.module.note</groupId>
-        <artifactId>incode-module-note-dom</artifactId>
+        <artifactId>incode-module-note-parent</artifactId>
         <version>1.9.0-SNAPSHOT</version>
     </parent>
-    <artifactId>incode-module-note-dom-impl</artifactId>
+    <artifactId>incode-module-note-dom</artifactId>
 
     <packaging>jar</packaging>
 
@@ -53,41 +53,12 @@ Copyright 2014~2015 Dan Haywood
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>incode-module-note-dom-spi</artifactId>
+            <artifactId>incode-module-note-api</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-applib</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.isisaddons.wicket.fullcalendar2</groupId>
             <artifactId>isis-wicket-fullcalendar2-cpt</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.isisaddons.module.poly</groupId>
-            <artifactId>isis-module-poly-dom</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.isisaddons.module.fakedata</groupId>
-            <artifactId>isis-module-fakedata-dom</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-unittestsupport</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.danhaywood.java</groupId>
-            <artifactId>danhaywood-java-assertjext</artifactId>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -106,12 +77,12 @@ Copyright 2014~2015 Dan Haywood
                         <artifactId>isis-maven-plugin</artifactId>
                         <version>${isis.version}</version>
                         <configuration>
-                            <appManifest>org.incode.module.note.dom.NoteModuleDomManifest</appManifest>
+                            <appManifest>org.incode.module.note.dom.impl.NoteModuleDomImplManifest</appManifest>
                         </configuration>
                         <dependencies>
                             <dependency>
                                 <groupId>${project.groupId}</groupId>
-                                <artifactId>incode-module-note-dom</artifactId>
+                                <artifactId>incode-module-note-parent</artifactId>
                                 <version>${project.version}</version>
                             </dependency>
                             <!--

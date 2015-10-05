@@ -11,14 +11,14 @@ import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import org.incode.module.note.dom.NoteModule;
+import org.incode.module.note.dom.api.NoteApiModule;
 
 @DomainService(
         nature = NatureOfService.VIEW_CONTRIBUTIONS_ONLY
 )
 public class NoteActionChangeNotes {
 
-    public static class DomainEvent extends NoteModule.ActionDomainEvent<NoteActionChangeNotes> {
+    public static class DomainEvent extends NoteApiModule.ActionDomainEvent<NoteActionChangeNotes> {
         public DomainEvent(final NoteActionChangeNotes source, final Identifier identifier, final Object... args) {
             super(source, identifier, args);
         }
@@ -28,21 +28,21 @@ public class NoteActionChangeNotes {
             domainEvent = DomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
     )
-    public Note changeNotes(
-            final Note note,
+    public NoteImpl changeNotes(
+            final NoteImpl note,
             @Parameter(optionality = Optionality.OPTIONAL)
-            @ParameterLayout(named = "Notes", multiLine = NoteModule.MultiLine.NOTES)
+            @ParameterLayout(named = "Notes", multiLine = NoteApiModule.MultiLine.NOTES)
             final String notes) {
         note.setNotes(notes);
 
         return note;
     }
 
-    public String default1ChangeNotes(final Note note) {
+    public String default1ChangeNotes(final NoteImpl note) {
         return note.getNotes();
     }
 
-    public String validateChangeNotes(final Note note, final String notes) {
+    public String validateChangeNotes(final NoteImpl note, final String notes) {
         if(Strings.isNullOrEmpty(notes) && note.getDate() == null) {
             return "Must specify either note text or a date (or both).";
         }

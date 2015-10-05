@@ -29,9 +29,8 @@ import org.junit.Test;
 import org.incode.module.note.dom.api.notable.Notable;
 import org.incode.module.note.dom.impl.notablelink.NotableLink;
 import org.incode.module.note.dom.impl.notablelink.NotableLinkRepository;
-import org.incode.module.note.dom.impl.note.Note;
+import org.incode.module.note.dom.impl.note.NoteImpl;
 import org.incode.module.note.dom.impl.note.NoteContributionsOnNotable;
-import org.incode.module.note.dom.impl.note.NoteRepository;
 import org.incode.module.note.fixture.dom.calendarname.CalendarNameRepositoryForDemo;
 import org.incode.module.note.fixture.dom.notedemoobject.NoteDemoObject;
 import org.incode.module.note.fixture.dom.notedemoobject.NoteDemoObjectMenu;
@@ -77,9 +76,9 @@ public class NotableLinkRepositoryIntegTest extends NoteModuleIntegTest {
             wrap(noteContributionsOnNotable).addNote(notable1, "note A", fakeData.jodaLocalDates().any(), "GREEN");
             wrap(noteContributionsOnNotable).addNote(notable1, "note B", fakeData.jodaLocalDates().any(), "BLUE");
 
-            final List<Note> notes = wrap(noteContributionsOnNotable).notes(notable1);
-            final Note note1 = Iterables.find(notes, input -> input.getNotes().equals("note A"));
-            final Note note2 = Iterables.find(notes, input -> input.getNotes().equals("note B"));
+            final List<NoteImpl> notes = wrap(noteContributionsOnNotable).notes(notable1);
+            final NoteImpl note1 = Iterables.find(notes, input -> input.getNotes().equals("note A"));
+            final NoteImpl note2 = Iterables.find(notes, input -> input.getNotes().equals("note B"));
 
             // when
             final NotableLink linkForNote1 = notableLinkRepository.findByNote(note1);
@@ -108,7 +107,7 @@ public class NotableLinkRepositoryIntegTest extends NoteModuleIntegTest {
             wrap(noteContributionsOnNotable).addNote(notable2, "note C", fakeData.jodaLocalDates().any(), "GREEN");
             wrap(noteContributionsOnNotable).addNote(notable2, "note D", fakeData.jodaLocalDates().any(), "BLUE");
 
-            final List<Note> notable2Notes = wrap(noteContributionsOnNotable).notes(notable2);
+            final List<NoteImpl> notable2Notes = wrap(noteContributionsOnNotable).notes(notable2);
 
             // when
             final List<NotableLink> links = notableLinkRepository.findByNotable(notable2);
@@ -135,8 +134,8 @@ public class NotableLinkRepositoryIntegTest extends NoteModuleIntegTest {
 
             wrap(noteContributionsOnNotable).addNote(notable2, "note D", fakeData.jodaLocalDates().any(), "GREEN");
 
-            final List<Note> notable1Notes = wrap(noteContributionsOnNotable).notes(notable1);
-            final List<Note> notable2Notes = wrap(noteContributionsOnNotable).notes(notable2);
+            final List<NoteImpl> notable1Notes = wrap(noteContributionsOnNotable).notes(notable1);
+            final List<NoteImpl> notable2Notes = wrap(noteContributionsOnNotable).notes(notable2);
 
             // when
             final NotableLink link1 = notableLinkRepository.findByNotableAndCalendarName(notable1, "GREEN");
@@ -160,8 +159,8 @@ public class NotableLinkRepositoryIntegTest extends NoteModuleIntegTest {
 
         private LocalDate someDate;
 
-        private List<Note> notable1Notes;
-        private List<Note> notable2Notes;
+        private List<NoteImpl> notable1Notes;
+        private List<NoteImpl> notable2Notes;
 
         @Before
         public void setUp() throws Exception {
@@ -184,7 +183,7 @@ public class NotableLinkRepositoryIntegTest extends NoteModuleIntegTest {
 
             // when
             final List<NotableLink> links = notableLinkRepository.findByNotableInDateRange(notable1, someDate, someDate);
-            Note noteA = Iterables.find(notable1Notes, x -> x.getNotes().equals("note A"));
+            NoteImpl noteA = Iterables.find(notable1Notes, x -> x.getNotes().equals("note A"));
 
             // then
             assertThat(links).hasSize(1);
@@ -197,8 +196,8 @@ public class NotableLinkRepositoryIntegTest extends NoteModuleIntegTest {
 
             // when
             final List<NotableLink> links = notableLinkRepository.findByNotableInDateRange(notable1, someDate, someDate.plusDays(2));
-            Note noteA = Iterables.find(notable1Notes, x -> x.getNotes().equals("note A"));
-            Note noteB = Iterables.find(notable1Notes, x -> x.getNotes().equals("note B"));
+            NoteImpl noteA = Iterables.find(notable1Notes, x -> x.getNotes().equals("note A"));
+            NoteImpl noteB = Iterables.find(notable1Notes, x -> x.getNotes().equals("note B"));
 
             // then
             assertThat(links).hasSize(2);

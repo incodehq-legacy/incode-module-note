@@ -18,7 +18,7 @@ import org.incode.module.note.dom.api.notable.Notable;
 )
 public class NoteActionRemove {
 
-    public static class DomainEvent extends Note.ActionDomainEvent<NoteActionRemove> {
+    public static class DomainEvent extends NoteImpl.ActionDomainEvent<NoteActionRemove> {
         public DomainEvent(
                 final NoteActionRemove source,
                 final Identifier identifier,
@@ -32,7 +32,7 @@ public class NoteActionRemove {
             semantics = SemanticsOf.IDEMPOTENT
     )
     public Notable remove(
-            final Note note,
+            final NoteImpl note,
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(named = "Are you sure?")
             final Boolean areYouSure
@@ -42,7 +42,7 @@ public class NoteActionRemove {
         return notable;
     }
 
-    public String validateRemove(final Note note, final Boolean areYouSure) {
+    public String validateRemove(final NoteImpl note, final Boolean areYouSure) {
         return areYouSure != null && areYouSure
                 ? null
                 : "Check the 'are you sure' to continue";

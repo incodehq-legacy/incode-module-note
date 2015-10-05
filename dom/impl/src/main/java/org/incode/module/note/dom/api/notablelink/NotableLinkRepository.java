@@ -35,7 +35,7 @@ import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.isisaddons.module.poly.dom.PolymorphicAssociationLink;
 
 import org.incode.module.note.dom.api.notable.Notable;
-import org.incode.module.note.dom.impl.note.Note;
+import org.incode.module.note.dom.impl.note.NoteImpl;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
@@ -44,14 +44,14 @@ import org.incode.module.note.dom.impl.note.Note;
 public class NotableLinkRepository {
 
     //region > init
-    PolymorphicAssociationLink.Factory<Note,Notable,NotableLink,NotableLink.InstantiateEvent> linkFactory;
+    PolymorphicAssociationLink.Factory<NoteImpl,Notable,NotableLink,NotableLink.InstantiateEvent> linkFactory;
 
     @PostConstruct
     public void init() {
         linkFactory = container.injectServicesInto(
                 new PolymorphicAssociationLink.Factory<>(
                         this,
-                        Note.class,
+                        NoteImpl.class,
                         Notable.class,
                         NotableLink.class,
                         NotableLink.InstantiateEvent.class
@@ -62,7 +62,7 @@ public class NotableLinkRepository {
 
     //region > findByNote (programmatic)
     @Programmatic
-    public NotableLink findByNote(final Note note) {
+    public NotableLink findByNote(final NoteImpl note) {
         return container.firstMatch(
                 new QueryDefault<>(NotableLink.class,
                         "findByNote",
@@ -147,7 +147,7 @@ public class NotableLinkRepository {
 
     //region > createLink (programmatic)
     @Programmatic
-    public NotableLink createLink(final Note note, final Notable notable) {
+    public NotableLink createLink(final NoteImpl note, final Notable notable) {
         final NotableLink link = linkFactory.createLink(note, notable);
 
         sync(note, link);
@@ -159,7 +159,7 @@ public class NotableLinkRepository {
 
     //region > updateLink
     @Programmatic
-    public void updateLink(final Note note) {
+    public void updateLink(final NoteImpl note) {
         final NotableLink link = findByNote(note);
         sync(note, link);
     }
@@ -168,9 +168,9 @@ public class NotableLinkRepository {
     //region > helpers (sync)
 
     /**
-     * copy over details from the {@link Note#} to the {@link NotableLink} (derived propoerties to support querying).
+     * copy over details from the {@link NoteImpl#} to the {@link NotableLink} (derived propoerties to support querying).
      */
-    void sync(final Note note, final NotableLink link) {
+    void sync(final NoteImpl note, final NotableLink link) {
         if(link == null) {
             return;
         }

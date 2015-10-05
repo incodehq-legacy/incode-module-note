@@ -14,12 +14,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.incode.module.note.dom;
+package org.incode.module.note.dom.api;
 
 import java.util.List;
 import org.apache.isis.applib.Identifier;
 
-public final class NoteModule {
+public final class NoteApiModule {
 
     //region > constants
 
@@ -41,7 +41,7 @@ public final class NoteModule {
     //endregion
 
     //region > constructor
-    private NoteModule(){}
+    private NoteApiModule(){}
     //endregion
 
     //region > event classes
