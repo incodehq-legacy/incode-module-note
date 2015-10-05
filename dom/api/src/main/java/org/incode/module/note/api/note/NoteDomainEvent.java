@@ -1,24 +1,24 @@
-package org.incode.module.note.dom.api.note;
+package org.incode.module.note.api.note;
 
 import org.joda.time.LocalDate;
 
 import org.apache.isis.applib.Identifier;
 
-import org.incode.module.note.dom.api.NoteApiModule;
-import org.incode.module.note.dom.api.notable.Notable;
+import org.incode.module.note.api.NoteApiModule;
+import org.incode.module.note.api.notable.Notable;
 
-public interface Note {
+public final class NoteDomainEvent {
 
-    int NOTES_ABBREVIATED_TO = 40;
+    private NoteDomainEvent(){}
 
-    abstract class PropertyDomainEvent<S,T> extends NoteApiModule.PropertyDomainEvent<S, T> {
-        public PropertyDomainEvent(final S source, final Identifier identifier, final T oldValue, final T newValue) {
+    public static abstract class Property<S,T> extends NoteApiModule.PropertyDomainEvent<S, T> {
+        public Property(final S source, final Identifier identifier, final T oldValue, final T newValue) {
             super(source, identifier, oldValue, newValue);
         }
     }
 
-    abstract class CollectionDomainEvent<S,T> extends NoteApiModule.CollectionDomainEvent<S, T> {
-        public CollectionDomainEvent(
+    public static abstract class Collection<S,T> extends NoteApiModule.CollectionDomainEvent<S, T> {
+        public Collection(
                 final S source,
                 final Identifier identifier,
                 final Of of, final T value) {
@@ -26,16 +26,16 @@ public interface Note {
         }
     }
 
-    abstract class ActionDomainEvent<S> extends NoteApiModule.ActionDomainEvent<S> {
-        public ActionDomainEvent(final S source, final Identifier identifier, final Object... arguments) {
+    public static abstract class Action<S> extends NoteApiModule.ActionDomainEvent<S> {
+        public Action(final S source, final Identifier identifier, final Object... arguments) {
             super(source, identifier, arguments);
         }
     }
 
 
-    class NotableDomainEvent extends PropertyDomainEvent<Note,Notable> {
+    public static class NotableDomainEvent extends Property<NoteDomainEvent,Notable> {
         public NotableDomainEvent(
-                final Note source,
+                final NoteDomainEvent source,
                 final Identifier identifier,
                 final Notable oldValue,
                 final Notable newValue) {
@@ -43,9 +43,9 @@ public interface Note {
         }
     }
 
-    class NotesAbbreviatedDomainEvent extends PropertyDomainEvent<Note,String> {
+    public static class NotesAbbreviatedDomainEvent extends Property<NoteDomainEvent,String> {
         public NotesAbbreviatedDomainEvent(
-                final Note source,
+                final NoteDomainEvent source,
                 final Identifier identifier,
                 final String oldValue,
                 final String newValue) {
@@ -53,9 +53,9 @@ public interface Note {
         }
     }
 
-    class NotesDomainEvent extends PropertyDomainEvent<Note,String> {
+    public static class NotesDomainEvent extends Property<NoteDomainEvent,String> {
         public NotesDomainEvent(
-                final Note source,
+                final NoteDomainEvent source,
                 final Identifier identifier,
                 final String oldValue,
                 final String newValue) {
@@ -63,9 +63,9 @@ public interface Note {
         }
     }
 
-    class DateDomainEvent extends PropertyDomainEvent<Note,LocalDate> {
+    public static class DateDomainEvent extends Property<NoteDomainEvent,LocalDate> {
         public DateDomainEvent(
-                final Note source,
+                final NoteDomainEvent source,
                 final Identifier identifier,
                 final LocalDate oldValue,
                 final LocalDate newValue) {
@@ -73,9 +73,9 @@ public interface Note {
         }
     }
 
-    class CalendarNameDomainEvent extends PropertyDomainEvent<Note,String> {
+    public static class CalendarNameDomainEvent extends Property<NoteDomainEvent,String> {
         public CalendarNameDomainEvent(
-                final Note source,
+                final NoteDomainEvent source,
                 final Identifier identifier,
                 final String oldValue,
                 final String newValue) {

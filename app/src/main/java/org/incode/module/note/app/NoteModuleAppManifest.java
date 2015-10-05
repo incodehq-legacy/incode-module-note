@@ -27,8 +27,8 @@ import com.google.common.collect.Lists;
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 
-import org.incode.module.note.dom.api.NoteApiModule;
-import org.incode.module.note.dom.impl.NoteDomModule;
+import org.incode.module.note.api.NoteApiModule;
+import org.incode.module.note.dom.NoteDomModule;
 import org.incode.module.note.fixture.NoteFixtureModule;
 
 /**

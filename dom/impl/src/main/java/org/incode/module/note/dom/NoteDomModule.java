@@ -14,7 +14,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.incode.module.note.dom.impl;
+package org.incode.module.note.dom;
 
 public final class NoteDomModule {
 

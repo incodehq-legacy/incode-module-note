@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.incode.module.note.dom.api.notable;
+package org.incode.module.note.api.notable;
 
 public interface Notable {
 

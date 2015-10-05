@@ -30,9 +30,9 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 
-import org.incode.module.note.dom.api.notable.Notable;
-import org.incode.module.note.dom.impl.notablelink.NotableLink;
-import org.incode.module.note.dom.impl.note.NoteRepository;
+import org.incode.module.note.api.notable.Notable;
+import org.incode.module.note.dom.notablelink.NotableLink;
+import org.incode.module.note.dom.note.NoteRepository;
 import org.incode.module.note.fixture.dom.notedemoobject.NoteDemoObject;
 
 @javax.jdo.annotations.PersistenceCapable(

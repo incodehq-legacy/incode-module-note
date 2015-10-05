@@ -1,10 +1,11 @@
-package org.incode.module.note.dom.impl.calendarname;
+package org.incode.module.note.dom.calendarname;
 
 import java.util.Collection;
 import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import org.assertj.core.api.Assertions;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
@@ -13,9 +14,8 @@ import org.junit.Test;
 
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
-import org.incode.module.note.dom.spi.calendarname.CalendarNameRepository;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import org.incode.module.note.api.calendarname.CalendarNameRepository;
+import org.incode.module.note.api.notable.Notable;
 
 public class CalendarNameServiceTest {
 
@@ -39,7 +39,7 @@ public class CalendarNameServiceTest {
         public void when_repository_returns_values() throws Exception {
 
             // given
-            final Object notable = new Object();
+            final Notable notable = new Notable(){};
             final List<String> calendarNames = Lists.newArrayList("a", "b", "c");
 
             // expecting
@@ -52,7 +52,7 @@ public class CalendarNameServiceTest {
             final Collection<String> returnedCalendarNames = calendarNameService.calendarNamesFor(notable);
 
             // then
-            assertThat(returnedCalendarNames).isEqualTo(calendarNames);
+            Assertions.assertThat(returnedCalendarNames).isEqualTo(calendarNames);
         }
 
 
@@ -60,7 +60,7 @@ public class CalendarNameServiceTest {
         public void when_repository_returns_null() throws Exception {
 
             // given
-            final Object notable = new Object();
+            final Notable notable = new Notable(){};
 
             // expecting
             context.checking(new Expectations() {{
@@ -72,8 +72,8 @@ public class CalendarNameServiceTest {
             final Collection<String> returnedCalendarNames = calendarNameService.calendarNamesFor(notable);
 
             // then
-            assertThat(returnedCalendarNames).hasSize(1);
-            assertThat(returnedCalendarNames).containsExactly(CalendarNameService.DEFAULT_CALENDAR_NAME);
+            Assertions.assertThat(returnedCalendarNames).hasSize(1);
+            Assertions.assertThat(returnedCalendarNames).containsExactly(CalendarNameService.DEFAULT_CALENDAR_NAME);
         }
 
     }

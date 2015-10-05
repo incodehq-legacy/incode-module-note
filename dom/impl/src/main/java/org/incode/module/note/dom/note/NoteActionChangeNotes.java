@@ -1,4 +1,4 @@
-package org.incode.module.note.dom.impl.note;
+package org.incode.module.note.dom.note;
 
 import com.google.common.base.Strings;
 
@@ -11,7 +11,7 @@ import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import org.incode.module.note.dom.api.NoteApiModule;
+import org.incode.module.note.api.NoteApiModule;
 
 @DomainService(
         nature = NatureOfService.VIEW_CONTRIBUTIONS_ONLY
@@ -28,8 +28,8 @@ public class NoteActionChangeNotes {
             domainEvent = DomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
     )
-    public NoteImpl changeNotes(
-            final NoteImpl note,
+    public Note changeNotes(
+            final Note note,
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(named = "Notes", multiLine = NoteApiModule.MultiLine.NOTES)
             final String notes) {
@@ -38,11 +38,11 @@ public class NoteActionChangeNotes {
         return note;
     }
 
-    public String default1ChangeNotes(final NoteImpl note) {
+    public String default1ChangeNotes(final Note note) {
         return note.getNotes();
     }
 
-    public String validateChangeNotes(final NoteImpl note, final String notes) {
+    public String validateChangeNotes(final Note note, final String notes) {
         if(Strings.isNullOrEmpty(notes) && note.getDate() == null) {
             return "Must specify either note text or a date (or both).";
         }

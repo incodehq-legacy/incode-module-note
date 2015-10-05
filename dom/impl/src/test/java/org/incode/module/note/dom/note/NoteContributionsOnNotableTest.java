@@ -1,9 +1,9 @@
-package org.incode.module.note.dom.impl.note;
+package org.incode.module.note.dom.note;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import org.incode.module.note.dom.api.notable.Notable;
+import org.incode.module.note.api.notable.Notable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -16,17 +16,17 @@ public class NoteContributionsOnNotableTest {
         noteContributionsOnNotable = new NoteContributionsOnNotable();
     }
 
-    public static class HideRemoveNoteImplTest extends NoteContributionsOnNotableTest {
+    public static class HideRemoveNoteDomainEventImplTest extends NoteContributionsOnNotableTest {
 
         Notable notable;
-        NoteImpl note;
+        Note note;
 
         @Test
         public void not_visible_if_contributed_to_notable() throws Exception {
 
             // when
             notable = null;
-            note = new NoteImpl();
+            note = new Note();
             final boolean isHidden = noteContributionsOnNotable.hideRemoveNote(notable, note);
 
             // then

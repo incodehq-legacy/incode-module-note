@@ -1,4 +1,4 @@
-package org.incode.module.note.dom.impl.note;
+package org.incode.module.note.dom.note;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -9,11 +9,11 @@ public class NoteTest {
 
     public static class NotesAbbreviatedTest extends NoteTest {
 
-        NoteImpl note;
+        Note note;
 
         @Before
         public void setUp() throws Exception {
-            note = new NoteImpl();
+            note = new Note();
         }
 
         @Test
@@ -57,19 +57,19 @@ public class NoteTest {
 
         @Test
         public void whenNull() throws Exception {
-            assertThat(NoteImpl.trim(null, "...", 20)).isNull();
+            assertThat(Note.trim(null, "...", 20)).isNull();
         }
         @Test
         public void whenShort() throws Exception {
-            assertThat(NoteImpl.trim("abc", "...", 4)).isEqualTo("abc");
+            assertThat(Note.trim("abc", "...", 4)).isEqualTo("abc");
         }
         @Test
         public void whenExact() throws Exception {
-            assertThat(NoteImpl.trim("abcdef", "...", 6)).isEqualTo("abcdef");
+            assertThat(Note.trim("abcdef", "...", 6)).isEqualTo("abcdef");
         }
         @Test
         public void whenTooLong() throws Exception {
-            assertThat(NoteImpl.trim("abcdef", "...", 5)).isEqualTo("ab...");
+            assertThat(Note.trim("abcdef", "...", 5)).isEqualTo("ab...");
         }
 
     }

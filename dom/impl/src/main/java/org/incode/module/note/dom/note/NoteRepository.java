@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.incode.module.note.dom.impl.note;
+package org.incode.module.note.dom.note;
 
 import java.util.List;
 
@@ -33,19 +33,19 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.QueryDefault;
 
-import org.incode.module.note.dom.api.notable.Notable;
-import org.incode.module.note.dom.impl.notablelink.NotableLink;
-import org.incode.module.note.dom.impl.notablelink.NotableLinkRepository;
+import org.incode.module.note.api.notable.Notable;
+import org.incode.module.note.dom.notablelink.NotableLink;
+import org.incode.module.note.dom.notablelink.NotableLinkRepository;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
-        repositoryFor = NoteImpl.class
+        repositoryFor = Note.class
 )
 public class NoteRepository {
 
     //region > findByNotable (programmatic)
     @Programmatic
-    public List<NoteImpl> findByNotable(final Notable notable) {
+    public List<Note> findByNotable(final Notable notable) {
         final List<NotableLink> links = notableLinkRepository.findByNotable(notable);
         return Lists.newArrayList(
                 Iterables.transform(links, NotableLink.Functions.note()));
@@ -54,7 +54,7 @@ public class NoteRepository {
 
     //region > findByNotableAndCalendarName (programmatic)
     @Programmatic
-    public NoteImpl findByNotableAndCalendarName(
+    public Note findByNotableAndCalendarName(
             final Notable notable,
             final String calendarName) {
         final NotableLink link = notableLinkRepository
@@ -65,12 +65,12 @@ public class NoteRepository {
 
     //region > findInDateRange (programmatic)
     @Programmatic
-    public List<NoteImpl> findInDateRange(
+    public List<Note> findInDateRange(
             final LocalDate startDate,
             final LocalDate endDate) {
         return container.allMatches(
                 new QueryDefault<>(
-                        NoteImpl.class,
+                        Note.class,
                         "findInDateRange",
                         "startDate", startDate,
                         "endDate", endDate));
@@ -79,7 +79,7 @@ public class NoteRepository {
 
     //region > findByNotableInDateRange (programmatic)
     @Programmatic
-    public Iterable<NoteImpl> findByNotableInDateRange(
+    public Iterable<Note> findByNotableInDateRange(
             final Notable notable,
             final LocalDate startDate,
             final LocalDate endDate) {
@@ -91,12 +91,12 @@ public class NoteRepository {
 
     //region > add (programmatic)
     @Programmatic
-    public NoteImpl add(
+    public Note add(
             final Notable notable,
             final String noteText,
             final LocalDate date,
             final String calendarName) {
-        final NoteImpl note = container.newTransientInstance(NoteImpl.class);
+        final Note note = container.newTransientInstance(Note.class);
         note.setDate(date);
         note.setCalendarName(calendarName);
         note.setNotable(notable);
@@ -109,7 +109,7 @@ public class NoteRepository {
 
     //region > remove (programmatic)
     @Programmatic
-    public void remove(NoteImpl note) {
+    public void remove(Note note) {
         final NotableLink link = notableLinkRepository.findByNote(note);
         container.removeIfNotAlready(link);
         container.flush();
@@ -121,8 +121,8 @@ public class NoteRepository {
     //region > allNotes (programmatic)
 
     @Programmatic
-    public List<NoteImpl> allNotes() {
-        return container.allInstances(NoteImpl.class);
+    public List<Note> allNotes() {
+        return container.allInstances(Note.class);
     }
     //endregion
 

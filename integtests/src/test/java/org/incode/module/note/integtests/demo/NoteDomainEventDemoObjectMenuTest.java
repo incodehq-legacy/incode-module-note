@@ -29,7 +29,7 @@ import org.incode.module.note.fixture.dom.notedemoobject.NoteDemoObjectMenu;
 import org.incode.module.note.fixture.scripts.scenarios.NoteDemoObjectsFixture;
 import org.incode.module.note.integtests.NoteModuleIntegTest;
 
-public class NoteDemoObjectMenuTest extends NoteModuleIntegTest {
+public class NoteDomainEventDemoObjectMenuTest extends NoteModuleIntegTest {
 
     @Inject
     NoteDemoObjectMenu noteDemoObjectMenu;

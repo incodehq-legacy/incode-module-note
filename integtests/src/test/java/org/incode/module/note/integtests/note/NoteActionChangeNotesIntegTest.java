@@ -27,10 +27,10 @@ import org.junit.Test;
 
 import org.apache.isis.applib.services.wrapper.InvalidException;
 
-import org.incode.module.note.dom.api.notable.Notable;
-import org.incode.module.note.dom.impl.note.NoteImpl;
-import org.incode.module.note.dom.impl.note.NoteActionChangeNotes;
-import org.incode.module.note.dom.impl.note.NoteContributionsOnNotable;
+import org.incode.module.note.api.notable.Notable;
+import org.incode.module.note.dom.note.Note;
+import org.incode.module.note.dom.note.NoteActionChangeNotes;
+import org.incode.module.note.dom.note.NoteContributionsOnNotable;
 import org.incode.module.note.fixture.dom.calendarname.CalendarNameRepositoryForDemo;
 import org.incode.module.note.fixture.dom.notedemoobject.NoteDemoObject;
 import org.incode.module.note.fixture.dom.notedemoobject.NoteDemoObjectMenu;
@@ -54,9 +54,9 @@ public class NoteActionChangeNotesIntegTest extends NoteModuleIntegTest {
     NoteActionChangeNotes noteActionChangeNotes;
 
     Notable notable;
-    NoteImpl note;
-    NoteImpl noteWithoutDate;
-    NoteImpl noteWithoutText;
+    Note note;
+    Note noteWithoutDate;
+    Note noteWithoutText;
 
     @Before
     public void setUpData() throws Exception {
@@ -69,7 +69,7 @@ public class NoteActionChangeNotesIntegTest extends NoteModuleIntegTest {
         wrap(noteContributionsOnNotable).addNote(notable, "note B", null, null);
         wrap(noteContributionsOnNotable).addNote(notable, null, fakeData.jodaLocalDates().any(), "RED");
 
-        final List<NoteImpl> noteList = wrap(noteContributionsOnNotable).notes(notable);
+        final List<Note> noteList = wrap(noteContributionsOnNotable).notes(notable);
         note = Iterables.find(noteList, x -> x.getNotes() != null && x.getDate() != null);
         noteWithoutDate = Iterables.find(noteList, x -> x.getDate() == null);
         noteWithoutText = Iterables.find(noteList, x -> x.getNotes() == null);

@@ -1,9 +1,8 @@
-package org.incode.module.note.dom.impl.note;
+package org.incode.module.note.dom.note;
 
 import javax.inject.Inject;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Optionality;
@@ -11,14 +10,15 @@ import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import org.incode.module.note.dom.api.notable.Notable;
+import org.incode.module.note.api.notable.Notable;
+import org.incode.module.note.api.note.NoteDomainEvent;
 
 @DomainService(
         nature = NatureOfService.VIEW_CONTRIBUTIONS_ONLY
 )
 public class NoteActionRemove {
 
-    public static class DomainEvent extends NoteImpl.ActionDomainEvent<NoteActionRemove> {
+    public static class DomainEvent extends NoteDomainEvent.Action<NoteActionRemove> {
         public DomainEvent(
                 final NoteActionRemove source,
                 final Identifier identifier,
@@ -27,12 +27,12 @@ public class NoteActionRemove {
         }
     }
 
-    @Action(
+    @org.apache.isis.applib.annotation.Action(
             domainEvent = DomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
     )
     public Notable remove(
-            final NoteImpl note,
+            final Note note,
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(named = "Are you sure?")
             final Boolean areYouSure
@@ -42,7 +42,7 @@ public class NoteActionRemove {
         return notable;
     }
 
-    public String validateRemove(final NoteImpl note, final Boolean areYouSure) {
+    public String validateRemove(final Note note, final Boolean areYouSure) {
         return areYouSure != null && areYouSure
                 ? null
                 : "Check the 'are you sure' to continue";

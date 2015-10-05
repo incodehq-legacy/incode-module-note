@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.incode.module.note.dom.impl.calendarname;
+package org.incode.module.note.dom.calendarname;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -27,9 +27,9 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 
-import org.incode.module.note.dom.api.notable.Notable;
-import org.incode.module.note.dom.impl.note.NoteImpl;
-import org.incode.module.note.dom.spi.calendarname.CalendarNameRepository;
+import org.incode.module.note.api.calendarname.CalendarNameRepository;
+import org.incode.module.note.api.notable.Notable;
+import org.incode.module.note.dom.note.Note;
 
 /**
  * Simple wrapper around {@link CalendarNameRepository}, that always returns a non-null list (including
@@ -43,7 +43,7 @@ public class CalendarNameService {
     public static final String DEFAULT_CALENDAR_NAME = "(default)";
 
     /**
-     * Return the list of objects to act as calendars for the {@link NoteImpl}s to attach to the specified {@link Notable},
+     * Return the list of objects to act as calendars for the {@link Note}s to attach to the specified {@link Notable},
      * as per {@link CalendarNameRepository}, or a default name otherwise.
      *
      * <p>
@@ -51,7 +51,7 @@ public class CalendarNameService {
      * </p>
      */
     @Programmatic
-    public Collection<String> calendarNamesFor(final Object notable) {
+    public Collection<String> calendarNamesFor(final Notable notable) {
         final Collection<String> calendarNames = calendarNameRepository.calendarNamesFor(notable);
         return calendarNames != null? calendarNames: Collections.singleton(DEFAULT_CALENDAR_NAME);
     }

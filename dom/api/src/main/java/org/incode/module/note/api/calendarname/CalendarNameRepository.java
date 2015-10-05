@@ -20,7 +20,7 @@ package org.incode.module.note.api.calendarname;
 
 import java.util.Collection;
 
-import org.incode.module.note.dom.api.notable.Notable;
+import org.incode.module.note.api.notable.Notable;
 
 /**
  * Optional SPI service
@@ -34,6 +34,6 @@ public interface CalendarNameRepository {
      *     May return null if there are none (in which case a default name will be used).
      * </p>
      */
-    Collection<String> calendarNamesFor(Object notable);
+    Collection<String> calendarNamesFor(Notable notable);
 
 }

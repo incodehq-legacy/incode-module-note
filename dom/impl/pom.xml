@@ -77,7 +77,7 @@ Copyright 2014~2015 Dan Haywood
                         <artifactId>isis-maven-plugin</artifactId>
                         <version>${isis.version}</version>
                         <configuration>
-                            <appManifest>org.incode.module.note.dom.impl.NoteModuleDomImplManifest</appManifest>
+                            <appManifest>org.incode.module.note.dom.NoteDomModuleManifest</appManifest>
                         </configuration>
                         <dependencies>
                             <dependency>

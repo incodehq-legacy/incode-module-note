@@ -32,12 +32,12 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.InvalidException;
 
-import org.incode.module.note.dom.api.notable.Notable;
-import org.incode.module.note.dom.impl.notablelink.NotableLink;
-import org.incode.module.note.dom.impl.notablelink.NotableLinkRepository;
-import org.incode.module.note.dom.impl.note.NoteImpl;
-import org.incode.module.note.dom.impl.note.NoteContributionsOnNotable;
-import org.incode.module.note.dom.impl.note.NoteRepository;
+import org.incode.module.note.api.notable.Notable;
+import org.incode.module.note.dom.notablelink.NotableLink;
+import org.incode.module.note.dom.notablelink.NotableLinkRepository;
+import org.incode.module.note.dom.note.Note;
+import org.incode.module.note.dom.note.NoteContributionsOnNotable;
+import org.incode.module.note.dom.note.NoteRepository;
 import org.incode.module.note.fixture.dom.calendarname.CalendarNameRepositoryForDemo;
 import org.incode.module.note.fixture.dom.notedemoobject.NoteDemoObject;
 import org.incode.module.note.fixture.dom.notedemoobject.NoteDemoObjectMenu;
@@ -93,7 +93,7 @@ public class NoteContributionsOnNotableIntegTest extends NoteModuleIntegTest {
                 wrap(noteContributionsOnNotable).addNote(notable, null, date, anyCalendarNameFor(notable));
 
                 // then
-                final List<NoteImpl> notes = wrap(noteContributionsOnNotable).notes(notable);
+                final List<Note> notes = wrap(noteContributionsOnNotable).notes(notable);
                 assertThat(notes).hasSize(1);
             }
 
@@ -122,7 +122,7 @@ public class NoteContributionsOnNotableIntegTest extends NoteModuleIntegTest {
                 wrap(noteContributionsOnNotable).addNote(notable, noteText, null, null);
 
                 // then
-                final List<NoteImpl> notes = wrap(noteContributionsOnNotable).notes(notable);
+                final List<Note> notes = wrap(noteContributionsOnNotable).notes(notable);
                 assertThat(notes).hasSize(1);
 
                 assertThat(notes.get(0).getNotes()).isEqualTo(noteText);
@@ -143,7 +143,7 @@ public class NoteContributionsOnNotableIntegTest extends NoteModuleIntegTest {
                 wrap(noteContributionsOnNotable).addNote(notable, fakeData.lorem().paragraph(), null, null);
 
                 // then
-                final List<NoteImpl> notes = wrap(noteContributionsOnNotable).notes(notable);
+                final List<Note> notes = wrap(noteContributionsOnNotable).notes(notable);
                 assertThat(notes).hasSize(5);
             }
 
@@ -318,27 +318,27 @@ public class NoteContributionsOnNotableIntegTest extends NoteModuleIntegTest {
                 wrap(noteContributionsOnNotable).addNote(notable, null, fakeData.jodaLocalDates().any(), "GREEN");
                 wrap(noteContributionsOnNotable).addNote(notable, null, fakeData.jodaLocalDates().any(), "BLUE");
 
-                final List<NoteImpl> noteList = wrap(noteContributionsOnNotable).notes(notable);
+                final List<Note> noteList = wrap(noteContributionsOnNotable).notes(notable);
                 assertThat(noteList).hasSize(2);
 
-                final List<NoteImpl> notes = noteRepository.findByNotable(notable);
+                final List<Note> notes = noteRepository.findByNotable(notable);
                 assertThat(notes).hasSize(2);
 
                 final List<NotableLink> links = notableLinkRepository.findByNotable(notable);
                 assertThat(links).hasSize(2);
 
 
-                final NoteImpl someNote = fakeData.collections().anyOf(noteList.toArray(new NoteImpl[]{}));
+                final Note someNote = fakeData.collections().anyOf(noteList.toArray(new Note[]{}));
 
                 // when
                 wrap(noteContributionsOnNotable).removeNote(notable, someNote);
 
                 // then
-                final List<NoteImpl> noteListAfter = wrap(noteContributionsOnNotable).notes(notable);
+                final List<Note> noteListAfter = wrap(noteContributionsOnNotable).notes(notable);
                 assertThat(noteListAfter).hasSize(1);
                 assertThat(noteListAfter).doesNotContain(someNote);
 
-                final List<NoteImpl> notesAfter = noteRepository.findByNotable(notable);
+                final List<Note> notesAfter = noteRepository.findByNotable(notable);
                 assertThat(notesAfter).hasSize(1);
 
                 final List<NotableLink> linksAfter = notableLinkRepository.findByNotable(notable);
@@ -353,7 +353,7 @@ public class NoteContributionsOnNotableIntegTest extends NoteModuleIntegTest {
             public void disabled_if_none_exist() throws Exception {
 
                 // given
-                final List<NoteImpl> noteList = wrap(noteContributionsOnNotable).notes(notable);
+                final List<Note> noteList = wrap(noteContributionsOnNotable).notes(notable);
                 assertThat(noteList).isEmpty();
 
                 // expecting
@@ -361,7 +361,7 @@ public class NoteContributionsOnNotableIntegTest extends NoteModuleIntegTest {
                 expectedException.expectMessage("No notes to remove");
 
                 // when
-                final NoteImpl note = null;
+                final Note note = null;
                 wrap(noteContributionsOnNotable).removeNote(notable, note);
             }
 
@@ -370,13 +370,13 @@ public class NoteContributionsOnNotableIntegTest extends NoteModuleIntegTest {
 
                 // given
                 wrap(noteContributionsOnNotable).addNote(notable, null, fakeData.jodaLocalDates().any(), "GREEN");
-                final List<NoteImpl> noteList = wrap(noteContributionsOnNotable).notes(notable);
+                final List<Note> noteList = wrap(noteContributionsOnNotable).notes(notable);
                 assertThat(noteList).isNotEmpty();
 
                 // expecting no errors
 
                 // when
-                final NoteImpl note = noteList.get(0);
+                final Note note = noteList.get(0);
                 wrap(noteContributionsOnNotable).removeNote(notable, note);
             }
         }
@@ -390,11 +390,11 @@ public class NoteContributionsOnNotableIntegTest extends NoteModuleIntegTest {
                 wrap(noteContributionsOnNotable).addNote(notable, null, fakeData.jodaLocalDates().any(), "GREEN");
                 wrap(noteContributionsOnNotable).addNote(notable, null, fakeData.jodaLocalDates().any(), "BLUE");
 
-                final List<NoteImpl> noteList = wrap(noteContributionsOnNotable).notes(notable);
+                final List<Note> noteList = wrap(noteContributionsOnNotable).notes(notable);
                 assertThat(noteList).hasSize(2);
 
                 // when
-                final List<NoteImpl> noteChoices = noteContributionsOnNotable.choices1RemoveNote(notable);
+                final List<Note> noteChoices = noteContributionsOnNotable.choices1RemoveNote(notable);
 
                 // then
                 assertThat(noteList).containsAll(noteChoices);
@@ -410,10 +410,10 @@ public class NoteContributionsOnNotableIntegTest extends NoteModuleIntegTest {
                 wrap(noteContributionsOnNotable).addNote(notable, null, fakeData.jodaLocalDates().any(), "GREEN");
                 wrap(noteContributionsOnNotable).addNote(notable, null, fakeData.jodaLocalDates().any(), "BLUE");
 
-                final List<NoteImpl> noteChoices = noteContributionsOnNotable.choices1RemoveNote(notable);
+                final List<Note> noteChoices = noteContributionsOnNotable.choices1RemoveNote(notable);
 
                 // when
-                final NoteImpl defaultChoice = noteContributionsOnNotable.default1RemoveNote(notable);
+                final Note defaultChoice = noteContributionsOnNotable.default1RemoveNote(notable);
 
                 // then
                 assertThat(defaultChoice).isSameAs(noteChoices.get(0));
@@ -442,11 +442,11 @@ public class NoteContributionsOnNotableIntegTest extends NoteModuleIntegTest {
 
                 // given
                 wrap(noteContributionsOnNotable).addNote(notable, null, fakeData.jodaLocalDates().any(), "GREEN");
-                final List<NoteImpl> noteList = wrap(noteContributionsOnNotable).notes(notable);
+                final List<Note> noteList = wrap(noteContributionsOnNotable).notes(notable);
                 assertThat(noteList).isNotEmpty();
 
                 // when
-                final NoteImpl note = noteList.get(0);
+                final Note note = noteList.get(0);
 
                 // when
                 wrap(noteContributionsOnNotable).removeNote(notable, note);

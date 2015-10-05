@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.incode.module.note.dom.impl.note;
+package org.incode.module.note.dom.note;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -43,9 +43,9 @@ import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.clock.ClockService;
 
-import org.incode.module.note.dom.api.NoteApiModule;
-import org.incode.module.note.dom.impl.calendarname.CalendarNameService;
-import org.incode.module.note.dom.api.notable.Notable;
+import org.incode.module.note.api.NoteApiModule;
+import org.incode.module.note.dom.calendarname.CalendarNameService;
+import org.incode.module.note.api.notable.Notable;
 
 @DomainService(
         nature = NatureOfService.VIEW_CONTRIBUTIONS_ONLY
@@ -106,7 +106,7 @@ public class NoteContributionsOnNotable {
     @CollectionLayout(
             render = RenderType.EAGERLY
     )
-    public List<NoteImpl> notes(final Notable notable) {
+    public List<Note> notes(final Notable notable) {
         return noteRepository.findByNotable(notable);
     }
     //endregion
@@ -217,27 +217,27 @@ public class NoteContributionsOnNotable {
             domainEvent = RemoveNoteEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
     )
-    public Notable removeNote(final Notable notable, final NoteImpl note) {
+    public Notable removeNote(final Notable notable, final Note note) {
         noteRepository.remove(note);
         return notable;
     }
 
     /**
-     * Has the effect of hiding the action if was contributed to {@link NoteImpl}.
+     * Has the effect of hiding the action if was contributed to {@link Note}.
      */
-    public boolean hideRemoveNote(final Notable notable, final NoteImpl note) {
+    public boolean hideRemoveNote(final Notable notable, final Note note) {
         return notable == null;
     }
 
-    public String disableRemoveNote(final Notable notable, final NoteImpl note) {
+    public String disableRemoveNote(final Notable notable, final Note note) {
         return choices1RemoveNote(notable).isEmpty() ? "No notes to remove" : null;
     }
 
-    public List<NoteImpl> choices1RemoveNote(final Notable notable) {
+    public List<Note> choices1RemoveNote(final Notable notable) {
         return notable != null ? noteRepository.findByNotable(notable): Collections.emptyList();
     }
 
-    public NoteImpl default1RemoveNote(final Notable notable) {
+    public Note default1RemoveNote(final Notable notable) {
         return firstOf(choices1RemoveNote(notable));
     }
 

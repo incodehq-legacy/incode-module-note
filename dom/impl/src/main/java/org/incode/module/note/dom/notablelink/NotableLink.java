@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.incode.module.note.dom.impl.notablelink;
+package org.incode.module.note.dom.notablelink;
 
 import java.util.List;
 import java.util.Set;
@@ -42,10 +42,10 @@ import org.isisaddons.module.poly.dom.PolymorphicAssociationLink;
 import org.isisaddons.wicket.fullcalendar2.cpt.applib.CalendarEventable;
 import org.isisaddons.wicket.fullcalendar2.cpt.applib.Calendarable;
 
-import org.incode.module.note.dom.api.NoteApiModule;
-import org.incode.module.note.dom.api.notable.Notable;
-import org.incode.module.note.dom.impl.calendarname.CalendarNameService;
-import org.incode.module.note.dom.impl.note.NoteImpl;
+import org.incode.module.note.api.NoteApiModule;
+import org.incode.module.note.api.notable.Notable;
+import org.incode.module.note.dom.calendarname.CalendarNameService;
+import org.incode.module.note.dom.note.Note;
 
 @javax.jdo.annotations.PersistenceCapable(
         identityType=IdentityType.DATASTORE,
@@ -97,7 +97,7 @@ import org.incode.module.note.dom.impl.note.NoteImpl;
         objectType = "note.NotableLink"
 )
 public abstract class NotableLink
-        extends PolymorphicAssociationLink<NoteImpl, Notable, NotableLink>
+        extends PolymorphicAssociationLink<Note, Notable, NotableLink>
         implements Calendarable {
 
     //region > event classes
@@ -138,9 +138,9 @@ public abstract class NotableLink
 
     //region > instantiateEvent (poly pattern)
     public static class InstantiateEvent
-            extends PolymorphicAssociationLink.InstantiateEvent<NoteImpl, Notable, NotableLink> {
+            extends PolymorphicAssociationLink.InstantiateEvent<Note, Notable, NotableLink> {
 
-        public InstantiateEvent(final Object source, final NoteImpl subject, final Notable owner) {
+        public InstantiateEvent(final Object source, final Note subject, final Notable owner) {
             super(NotableLink.class, source, subject, owner);
         }
     }
@@ -160,13 +160,13 @@ public abstract class NotableLink
      */
     @Override
     @Programmatic
-    public NoteImpl getSubject() {
+    public Note getSubject() {
         return getNote();
     }
 
     @Override
     @Programmatic
-    public void setSubject(final NoteImpl subject) {
+    public void setSubject(final Note subject) {
         setNote(subject);
     }
 
@@ -197,26 +197,26 @@ public abstract class NotableLink
 
     //region > note (property)
 
-    public static class EventDomainEvent extends PropertyDomainEvent<NoteImpl> {
+    public static class EventDomainEvent extends PropertyDomainEvent<Note> {
         public EventDomainEvent(final NotableLink source, final Identifier identifier) {
             super(source, identifier);
         }
-        public EventDomainEvent(final NotableLink source, final Identifier identifier, final NoteImpl oldValue, final NoteImpl newValue) {
+        public EventDomainEvent(final NotableLink source, final Identifier identifier, final Note oldValue, final Note newValue) {
             super(source, identifier, oldValue, newValue);
         }
     }
 
-    private NoteImpl note;
+    private Note note;
     @javax.jdo.annotations.Column(allowsNull = "false", name = "eventId")
     @Property(
             domainEvent = EventDomainEvent.class,
             editing = Editing.DISABLED
     )
-    public NoteImpl getNote() {
+    public Note getNote() {
         return note;
     }
 
-    public void setNote(final NoteImpl note) {
+    public void setNote(final Note note) {
         this.note = note;
     }
     //endregion
@@ -290,10 +290,10 @@ public abstract class NotableLink
     private LocalDate date;
 
     /**
-     * Copy of the {@link #getNote() note}'s {@link NoteImpl#getDate() date}, to support querying.
+     * Copy of the {@link #getNote() note}'s {@link Note#getDate() date}, to support querying.
      *
      * <p>
-     *     If the {@link NoteImpl#getDate()} is changed, then this derived property is also updated.
+     *     If the {@link Note#getDate()} is changed, then this derived property is also updated.
      * </p>
      */
     @javax.jdo.annotations.Column(allowsNull = "true")
@@ -324,10 +324,10 @@ public abstract class NotableLink
     private String calendarName;
 
     /**
-     * Copy of the {@link #getNote() note}'s {@link NoteImpl#getCalendarName() calendar name}, to support querying.
+     * Copy of the {@link #getNote() note}'s {@link Note#getCalendarName() calendar name}, to support querying.
      *
      * <p>
-     *     If the {@link NoteImpl#getCalendarName()} is changed, then this derived property is also updated.
+     *     If the {@link Note#getCalendarName()} is changed, then this derived property is also updated.
      * </p>
      */
     @javax.jdo.annotations.Column(allowsNull = "true", length= NoteApiModule.JdoColumnLength.CALENDAR_NAME)
@@ -352,7 +352,7 @@ public abstract class NotableLink
     @Programmatic
     @Override
     public Set<String> getCalendarNames() {
-        return Sets.newTreeSet(calendarNameService.calendarNamesFor(getSubject()));
+        return Sets.newTreeSet(calendarNameService.calendarNamesFor(getNotable()));
     }
 
     /**
@@ -369,10 +369,10 @@ public abstract class NotableLink
 
     //region > Functions
     public static class Functions {
-        public static Function<NotableLink, NoteImpl> note() {
-            return note(NoteImpl.class);
+        public static Function<NotableLink, Note> note() {
+            return note(Note.class);
         }
-        public static <T extends NoteImpl> Function<NotableLink, T> note(Class<T> cls) {
+        public static <T extends Note> Function<NotableLink, T> note(Class<T> cls) {
             return input -> input != null
                                 ? (T)input.getNote()
                                 : null;
